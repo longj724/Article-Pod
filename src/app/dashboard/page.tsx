@@ -63,13 +63,14 @@ const Dashboard = () => {
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
-      setCurrentTime((audioRef.current.currentTime / duration) * 100);
+      setCurrentTime(audioRef.current.currentTime);
     }
   };
 
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
+      setCurrentTime(0);
     }
   };
 
@@ -95,7 +96,7 @@ const Dashboard = () => {
     if (audioRef.current && duration) {
       const newTime = (value[0] / 100) * duration;
       audioRef.current.currentTime = newTime;
-      setCurrentTime(value[0]);
+      setCurrentTime(newTime);
     }
   };
 
@@ -289,7 +290,7 @@ const Dashboard = () => {
 
             <div className="space-y-2">
               <Slider
-                value={[currentTime]}
+                value={[duration ? (currentTime / duration) * 100 : 0]}
                 max={100}
                 step={1}
                 className="w-full"
@@ -297,7 +298,7 @@ const Dashboard = () => {
                 disabled={!selectedArticle}
               />
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>{formatTime((currentTime * duration) / 100)}</span>
+                <span>{formatTime(currentTime)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
             </div>
