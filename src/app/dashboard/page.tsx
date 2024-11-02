@@ -134,6 +134,17 @@ const Dashboard = () => {
     deleteArticle(articleId);
   };
 
+  const handleRestart = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      setCurrentTime(0);
+
+      if (isPlaying) {
+        audioRef.current.play();
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
@@ -273,7 +284,12 @@ const Dashboard = () => {
               <Button variant="ghost" size="icon" disabled={!selectedArticle}>
                 <SkipBack className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" disabled={!selectedArticle}>
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={!selectedArticle}
+                onClick={handleRestart}
+              >
                 <RotateCcw className="w-4 h-4" />
               </Button>
               <Button
