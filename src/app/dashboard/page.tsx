@@ -20,7 +20,7 @@ import {
   Play,
   RotateCcw,
   SkipBack,
-  SkipForward,
+  FastForward,
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import ArticleCard from './_components/article-card';
@@ -48,6 +48,7 @@ const Dashboard = () => {
   } = useArticleSubmission();
   const [audioError, setAudioError] = useState<string | null>(null);
   const { deleteArticle, isDeleting, error: deleteError } = useDeleteArticle();
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
   const handleSubmit = async () => {
     if (!url.trim()) return;
@@ -142,6 +143,27 @@ const Dashboard = () => {
       if (isPlaying) {
         audioRef.current.play();
       }
+    }
+  };
+
+  const handleSkipForward = () => {
+    if (audioRef.current) {
+      const newTime = audioRef.current.currentTime + 15; // Skip forward 15 seconds
+      if (newTime < duration) {
+        audioRef.current.currentTime = newTime;
+        setCurrentTime((newTime / duration) * 100); // Update current time percentage
+      } else {
+        audioRef.current.currentTime = duration; // If it exceeds duration, set to max
+        setCurrentTime(100); // Update to 100%
+      }
+    }
+  };
+
+  const handleSpeedChange = (value: string) => {
+    const speed = parseFloat(value);
+    setPlaybackSpeed(speed);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = speed; // Set the playback rate of the audio
     }
   };
 
@@ -304,17 +326,24 @@ const Dashboard = () => {
                   <Play className="w-4 h-4" />
                 )}
               </Button>
-              <Button variant="ghost" size="icon">
-                <SkipForward className="w-4 h-4" />
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={!selectedArticle}
+                onClick={handleSkipForward}
+              >
+                <FastForward className="w-4 h-4" />
               </Button>
-              <Select defaultValue="1">
+              <Select defaultValue="1" onValueChange={handleSpeedChange}>
                 <SelectTrigger className="w-[110px]">
                   <SelectValue placeholder="Speed" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="0.5">0.5x Speed</SelectItem>
                   <SelectItem value="1">1x Speed</SelectItem>
+                  <SelectItem value="1.25">1.25x Speed</SelectItem>
                   <SelectItem value="1.5">1.5x Speed</SelectItem>
+                  <SelectItem value="1.75">1.75x Speed</SelectItem>
                   <SelectItem value="2">2x Speed</SelectItem>
                 </SelectContent>
               </Select>
