@@ -2,6 +2,15 @@
 
 // External Dependencies
 import { useState, useEffect, useRef } from 'react';
+import {
+  FastForward,
+  Headphones,
+  ListMusic,
+  Pause,
+  Play,
+  RotateCcw,
+  SkipBack,
+} from 'lucide-react';
 
 // Internal Dependencies
 import { Button } from '@/components/ui/button';
@@ -13,15 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Headphones,
-  ListMusic,
-  Pause,
-  Play,
-  RotateCcw,
-  SkipBack,
-  FastForward,
-} from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import ArticleCard from './_components/article-card';
 import { useArticleSubmission } from '@/hooks/useArticleSubmission';
@@ -30,6 +30,7 @@ import { Article } from '@/lib/types';
 import { formatTime } from '@/lib/utils';
 import { getReadableVoiceName } from '@/lib/utils';
 import { useDeleteArticle } from '@/hooks/useDeleteArticle';
+import useTestVoiceAudio from '@/hooks/useTestVoiceAudio';
 
 const Dashboard = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -49,6 +50,7 @@ const Dashboard = () => {
   const [audioError, setAudioError] = useState<string | null>(null);
   const { deleteArticle, isDeleting, error: deleteError } = useDeleteArticle();
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const { isTestingVoice, testVoiceAudio } = useTestVoiceAudio();
 
   const handleSubmit = async () => {
     if (!url.trim()) return;
@@ -232,6 +234,13 @@ const Dashboard = () => {
               </SelectItem>
             </SelectContent>
           </Select>
+          <Button
+            className="w-full"
+            onClick={() => testVoiceAudio(selectedVoice)}
+            disabled={isSubmitting || isTestingVoice !== null}
+          >
+            Play Voice
+          </Button>
           <Button
             className="w-full"
             onClick={handleSubmit}
