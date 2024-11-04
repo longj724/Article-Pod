@@ -254,7 +254,7 @@ const Dashboard = () => {
 
       <div className="flex-1 flex flex-col">
         <div className="p-4 flex-1">
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[78vh] overflow-y-auto">
             {isLoadingArticles ? (
               <div>Loading articles...</div>
             ) : (
@@ -272,7 +272,7 @@ const Dashboard = () => {
         </div>
 
         {/* Audio Player */}
-        <div className="border-t p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="border-t p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-[20vh] overflow-clip">
           <audio
             ref={audioRef}
             src={selectedArticle?.audio_url}
