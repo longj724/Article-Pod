@@ -245,9 +245,9 @@ const Dashboard = () => {
       </div>
 
       <div className="flex-1 flex flex-col">
-        <div className="p-4 flex-1">
-          <h2 className="text-xl font-bold mb-4">My Articles</h2>
-          <div className="space-y-4 max-h-[78vh] overflow-y-auto">
+        <div className="p-6 flex-1 overflow-hidden">
+          <h2 className="text-xl font-bold mb-2">My Articles</h2>
+          <div className="space-y-2 h-[calc(100vh-12rem)] overflow-y-auto">
             {isLoadingArticles ? (
               <div>Loading articles...</div>
             ) : (
@@ -265,7 +265,7 @@ const Dashboard = () => {
         </div>
 
         {/* Audio Player */}
-        <div className="border-t p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-[20vh] overflow-clip">
+        <div className="border-t p-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <audio
             ref={audioRef}
             src={selectedArticle?.audio_url}
@@ -273,15 +273,15 @@ const Dashboard = () => {
           />
           <div className="flex flex-row items-center justify-center">
             <div className="flex justify-between items-center w-1/4">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <div className="w-10 h-10 bg-muted rounded flex items-center justify-center">
-                  <Headphones className="w-6 h-6" />
+                  <Headphones className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="font-medium">
+                  <div className="font-medium text-sm">
                     {selectedArticle?.title || 'No article selected'}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-xs text-muted-foreground">
                     {selectedArticle
                       ? getReadableVoiceName(selectedArticle.speech_model)
                       : ''}
@@ -290,8 +290,8 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="space-y-2 w-2/4 mr-16">
-              <div className="flex justify-center items-center gap-4 w-full">
+            <div className="space-y-1 w-2/4 mr-16">
+              <div className="flex justify-center items-center gap-2 w-full">
                 <Button variant="ghost" size="icon" disabled={!selectedArticle}>
                   <SkipBack className="w-4 h-4" />
                 </Button>
@@ -345,12 +345,12 @@ const Dashboard = () => {
                 onValueChange={handleSliderChange}
                 disabled={!selectedArticle}
               />
-              <div className="flex justify-between text-sm text-muted-foreground">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>{formatTime(currentTime)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
               {audioError && (
-                <div className="text-red-500 text-sm text-center">
+                <div className="text-red-500 text-xs text-center">
                   {audioError}
                 </div>
               )}
