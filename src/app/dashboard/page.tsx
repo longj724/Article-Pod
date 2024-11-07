@@ -5,7 +5,6 @@ import { useState, useEffect, useRef } from 'react';
 import {
   FastForward,
   Headphones,
-  ListMusic,
   Pause,
   Play,
   RotateCcw,
@@ -176,20 +175,13 @@ const Dashboard = () => {
       <div className="w-64 border-r p-4 flex flex-col gap-4">
         <div className="flex items-center gap-2 text-xl font-semibold">
           <Headphones className="w-6 h-6" />
-          <span>ArticleReader</span>
-        </div>
-
-        <div className="space-y-2">
-          <Button variant="ghost" className="w-full justify-start gap-2">
-            <ListMusic className="w-4 h-4" />
-            Playlist
-          </Button>
+          <span>ArticlePod</span>
         </div>
 
         {/* URL Input */}
         <div className="space-y-4 mt-4">
           <Input
-            placeholder="Paste article URL..."
+            placeholder="Paste article URL"
             className="w-full"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
@@ -254,6 +246,7 @@ const Dashboard = () => {
 
       <div className="flex-1 flex flex-col">
         <div className="p-4 flex-1">
+          <h2 className="text-xl font-bold mb-4">My Articles</h2>
           <div className="space-y-4 max-h-[78vh] overflow-y-auto">
             {isLoadingArticles ? (
               <div>Loading articles...</div>
@@ -278,8 +271,8 @@ const Dashboard = () => {
             src={selectedArticle?.audio_url}
             preload="metadata"
           />
-          <div className="max-w-3xl mx-auto space-y-4">
-            <div className="flex justify-between items-center">
+          <div className="flex flex-row items-center justify-center">
+            <div className="flex justify-between items-center w-1/4">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-muted rounded flex items-center justify-center">
                   <Headphones className="w-6 h-6" />
@@ -297,7 +290,53 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 w-2/4 mr-16">
+              <div className="flex justify-center items-center gap-4 w-full">
+                <Button variant="ghost" size="icon" disabled={!selectedArticle}>
+                  <SkipBack className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!selectedArticle}
+                  onClick={handleRestart}
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="icon"
+                  className="h-10 w-10 rounded-full"
+                  onClick={togglePlayPause}
+                  disabled={!selectedArticle}
+                >
+                  {isPlaying ? (
+                    <Pause className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4" />
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!selectedArticle}
+                  onClick={handleSkipForward}
+                >
+                  <FastForward className="w-4 h-4" />
+                </Button>
+                <Select defaultValue="1" onValueChange={handleSpeedChange}>
+                  <SelectTrigger className="w-[110px]">
+                    <SelectValue placeholder="Speed" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0.5">0.5x Speed</SelectItem>
+                    <SelectItem value="1">1x Speed</SelectItem>
+                    <SelectItem value="1.25">1.25x Speed</SelectItem>
+                    <SelectItem value="1.5">1.5x Speed</SelectItem>
+                    <SelectItem value="1.75">1.75x Speed</SelectItem>
+                    <SelectItem value="2">2x Speed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <Slider
                 value={[duration ? (currentTime / duration) * 100 : 0]}
                 max={100}
@@ -310,58 +349,14 @@ const Dashboard = () => {
                 <span>{formatTime(currentTime)}</span>
                 <span>{formatTime(duration)}</span>
               </div>
+              {audioError && (
+                <div className="text-red-500 text-sm text-center">
+                  {audioError}
+                </div>
+              )}
             </div>
-
-            <div className="flex justify-center items-center gap-4">
-              <Button variant="ghost" size="icon" disabled={!selectedArticle}>
-                <SkipBack className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                disabled={!selectedArticle}
-                onClick={handleRestart}
-              >
-                <RotateCcw className="w-4 h-4" />
-              </Button>
-              <Button
-                size="icon"
-                className="h-10 w-10 rounded-full"
-                onClick={togglePlayPause}
-                disabled={!selectedArticle}
-              >
-                {isPlaying ? (
-                  <Pause className="w-4 h-4" />
-                ) : (
-                  <Play className="w-4 h-4" />
-                )}
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                disabled={!selectedArticle}
-                onClick={handleSkipForward}
-              >
-                <FastForward className="w-4 h-4" />
-              </Button>
-              <Select defaultValue="1" onValueChange={handleSpeedChange}>
-                <SelectTrigger className="w-[110px]">
-                  <SelectValue placeholder="Speed" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0.5">0.5x Speed</SelectItem>
-                  <SelectItem value="1">1x Speed</SelectItem>
-                  <SelectItem value="1.25">1.25x Speed</SelectItem>
-                  <SelectItem value="1.5">1.5x Speed</SelectItem>
-                  <SelectItem value="1.75">1.75x Speed</SelectItem>
-                  <SelectItem value="2">2x Speed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <div className="w-1/4"></div>
           </div>
-          {audioError && (
-            <div className="text-red-500 text-sm text-center">{audioError}</div>
-          )}
         </div>
       </div>
     </div>
